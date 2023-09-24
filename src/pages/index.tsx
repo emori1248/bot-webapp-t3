@@ -6,7 +6,6 @@ import { api } from "~/utils/api";
 export default function Home() {
   const hello = api.example.hello.useQuery({ text: "Railway" });
   const clerkuser = api.example.me.useQuery();
-  
 
   return (
     <>
@@ -45,8 +44,12 @@ export default function Home() {
             </Link>
           </div>
           <p className="text-2xl text-white">
-            {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-            {clerkuser.data ? clerkuser.data.id : "Loading tRPC query..."}
+            <span>
+              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
+            </span>
+            <span>
+              {clerkuser.data ? clerkuser.data.id : "Loading tRPC query..."}
+            </span>
           </p>
         </div>
       </main>
