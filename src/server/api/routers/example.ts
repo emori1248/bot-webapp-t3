@@ -16,7 +16,7 @@ export const exampleRouter = createTRPCRouter({
     return ctx.db.example.findMany();
   }),
   me: privateProcedure
-    .query(async ({ctx}) => {
+    .query(({ctx}) => {
         return{id: ctx.userId};
     })
 });
