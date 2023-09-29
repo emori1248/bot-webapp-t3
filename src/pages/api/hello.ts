@@ -18,7 +18,7 @@ const discord = new REST({version:'10'}).setToken(env.DISCORD_API_KEY)
 function runMiddleware(
   req: NextApiRequest,
   res: NextApiResponse,
-  fn: Function,
+  fn: typeof cors,
 ) {
   return new Promise((resolve, reject) => {
     fn(req, res, (result: any) => {
