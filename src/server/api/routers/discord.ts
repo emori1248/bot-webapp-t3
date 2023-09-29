@@ -18,7 +18,7 @@ export const discordRouter = createTRPCRouter({
     .input(z.object({ text: z.string() }))
     .mutation(async ({ input }) => {
       try {
-        await discord.post(Routes.channelMessages("1155195072703377418"), {
+        await discord.post(Routes.channelMessages("867610479601909820"), {
           body: {
             content: input.text,
           },
