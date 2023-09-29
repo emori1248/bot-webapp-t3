@@ -6,6 +6,7 @@ import { api } from "~/utils/api";
 export default function Home() {
   const hello = api.example.hello.useQuery({ text: "Railway" });
   const clerkuser = api.example.me.useQuery();
+  const {mutate} = api.discord.hello.useMutation();
 
   return (
     <>
@@ -47,9 +48,12 @@ export default function Home() {
             <span>
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
             </span>
+            <br/>
             <span>
               {clerkuser.data ? clerkuser.data.id : "Loading tRPC query..."}
             </span>
+            <br/>
+            <input type="button" value="button" onClick={()=>mutate({text:"hello from react frontend"})}/>
           </p>
         </div>
       </main>
