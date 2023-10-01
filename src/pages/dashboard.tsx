@@ -1,6 +1,5 @@
 import Head from "next/head";
-import Link from "next/link";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 
 import { api } from "~/utils/api";
 
