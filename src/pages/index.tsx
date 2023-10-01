@@ -1,14 +1,11 @@
 import Head from "next/head";
 import Link from "next/link";
-import Navbar from "~/components/Navbar";
-
-import { api } from "~/utils/api";
 
 export default function Home() {
   //   const hello = api.example.hello.useQuery({ text: "Railway" });
   //   const clerkuser = api.example.me.useQuery();
-  const rule = api.rules.getAll.useQuery({ guild_id: "846599213440696360" });
-  const { mutate } = api.discord.hello.useMutation();
+//   const rule = api.rules.getAll.useQuery({ guild_id: "846599213440696360" });
+//   const { mutate } = api.discord.hello.useMutation();
 
   return (
     <>
