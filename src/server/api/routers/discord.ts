@@ -1,15 +1,11 @@
 import { z } from "zod";
 
-import {
-  createTRPCRouter,
-  privateProcedure,
-  publicProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 
 import { REST } from "@discordjs/rest";
 import {
   Routes,
-  RESTGetAPICurrentUserGuildsResult,
+  type RESTGetAPICurrentUserGuildsResult,
 } from "discord-api-types/v10";
 
 import { env } from "~/env.mjs";
@@ -32,7 +28,7 @@ export const discordRouter = createTRPCRouter({
       }
       return;
     }),
-  getServersWhereUserIsAdmin: privateProcedure.query(async ({ ctx }) => {
+  getServersWhereUserIsAdmin: privateProcedure.query(async () => {
     try {
       const data = (await discord.get(
         Routes.userGuilds(),
