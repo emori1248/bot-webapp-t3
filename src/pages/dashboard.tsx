@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 import { api } from "~/utils/api";
 
@@ -7,6 +8,7 @@ export default function Home() {
   //   const hello = api.example.hello.useQuery({ text: "Railway" });
   //   const clerkuser = api.example.me.useQuery();
   const rule = api.rules.getAll.useQuery({ guild_id: "846599213440696360" });
+  const servers = api.discord.getServersWhereUserIsAdmin.useQuery();
   const { mutate } = api.discord.hello.useMutation();
 
   return (
@@ -18,39 +20,19 @@ export default function Home() {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-          </h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
-              <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
-              </div>
-            </Link>
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/introduction"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">Documentation →</h3>
-              <div className="text-lg">
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
-              </div>
-            </Link>
-          </div>
           <div className="text-2xl text-white">
             <div className="flex flex-col">
               {rule.data
                 ? rule.data.rules.flatMap((rule) => (
                     <span>
                       {rule.rule_name}: {rule.rule_content}
+                    </span>
+                  ))
+                : "Loading..."}
+              {servers.data
+                ? servers.data.flatMap((guild) => (
+                    <span>
+                      {guild.name}: {guild.id}
                     </span>
                   ))
                 : "Loading..."}
@@ -62,8 +44,46 @@ export default function Home() {
               onClick={() => mutate({ text: "hello from react frontend" })}
             />
           </div>
+          <AddRuleForm />
         </div>
       </main>
     </>
+  );
+}
+
+function AddRuleForm() {
+  const { mutate } = api.rules.addNewRegexRule.useMutation();
+  type Inputs = {
+    guild_id: string;
+    regex: string;
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => mutate({...data});
+  return (
+    <div className="flex flex-col bg-sky-200">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+        <div className="flex flex-col">
+          <span>Guild Id:</span>
+          <input
+            defaultValue={"846599213440696360"}
+            {...register("guild_id", { required: true })}
+            className="mb-4"
+          />
+          {errors.guild_id && <span>This field is required</span>}
+        </div>
+        <div className="flex flex-col">
+          <span>Regex:</span>
+          <input {...register("regex", { required: true })} className="mb-4" />
+          {errors.regex && <span>This field is required</span>}
+        </div>
+        <input type="submit" className="bg-white" />
+      </form>
+    </div>
   );
 }

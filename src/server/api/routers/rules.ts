@@ -13,13 +13,23 @@ export const ruleRouter = createTRPCRouter({
       const rules = await ctx.db.rule.findMany({
         where: { guild_id: input.guild_id },
         select: {
-            rule_name: true,
-            rule_type: true,
-            rule_content: true,
-        }
+          rule_name: true,
+          rule_type: true,
+          rule_content: true,
+        },
       });
       return {
-        rules
+        rules,
       };
+    }),
+  addNewRegexRule: privateProcedure
+    .input(z.object({ guild_id: z.string(), regex: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      await ctx.db.rule.create({ data: {
+        guild_id: input.guild_id,
+        rule_content: input.regex,
+        rule_name: "test name",
+        rule_type: "REGEX"
+      } });
     }),
 });
