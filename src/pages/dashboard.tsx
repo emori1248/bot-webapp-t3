@@ -64,9 +64,15 @@ function AddRuleForm() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => mutate({...data});
+//   const onSubmit: SubmitHandler<Inputs> = (
+//     data
+//   ): Promise<void> => {
+//     mutate({...data});
+//   }
+
   return (
     <div className="flex flex-col bg-sky-200">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+      <form onSubmit={void handleSubmit(onSubmit)} className="flex flex-col">
         <div className="flex flex-col">
           <span>Guild Id:</span>
           <input
