@@ -63,7 +63,7 @@ function AddRuleForm() {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => mutate({...data});
+  const onSubmit: SubmitHandler<Inputs> = async (data) => await mutate({...data});
   return (
     <div className="flex flex-col bg-sky-200">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
