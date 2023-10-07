@@ -19,11 +19,13 @@ datasource db {
 //     @@index([name])
 // }
 
-model Rule {
-    rule_id      Int      @id @default(autoincrement())
+model CustomRule {
+    rule_id      Int            @id @default(autoincrement())
     rule_name    String
-    rule_type    RuleType @default(REGEX)
+    rule_type    CustomRuleType @default(REGEX)
     rule_content String
+
+    enabled Boolean @default(true)
 
     guild_id String
 
@@ -33,6 +35,32 @@ model Rule {
     @@index([guild_id])
 }
 
-enum RuleType {
+model Guild {
+    guild_id      String                @id @unique
+    standardRules EnabledStandardRule[]
+}
+
+model EnabledStandardRule {
+    rule_id  Int              @id @default(autoincrement())
+    guild    Guild            @relation(fields: [guild_id], references: [guild_id])
+    guild_id String
+    type     StandardRuleType
+}
+
+enum RuleExemptionLevel {
+    NONE
+    ADMIN
+}
+
+enum StandardRuleType {
+    GENERAL_PROFANITY_FILTER
+    BANNED_WORDS
+    BANNED_WEBSITES
+    LINKS
+    MASS_MENTION
+    SERVER_INVITES
+}
+
+enum CustomRuleType {
     REGEX
 }

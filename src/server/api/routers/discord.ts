@@ -5,7 +5,7 @@ import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 import { REST } from "@discordjs/rest";
 import {
   Routes,
-  type RESTGetAPICurrentUserGuildsResult,
+  type RESTGetAPICurrentUserGuildsResult
 } from "discord-api-types/v10";
 
 import { env } from "~/env.mjs";
@@ -20,26 +20,26 @@ export const discordRouter = createTRPCRouter({
       try {
         await discord.post(Routes.channelMessages("867610479601909820"), {
           body: {
-            content: input.text,
-          },
+            content: input.text
+          }
         });
       } catch (error) {
         console.log(error);
       }
       return;
     }),
-  getServersWhereUserIsAdmin: privateProcedure.query(async () => {
+  getServers: privateProcedure.query(async () => {
     try {
       const data = (await discord.get(
-        Routes.userGuilds(),
+        Routes.userGuilds()
       )) as RESTGetAPICurrentUserGuildsResult;
       return data;
     } catch (error) {
       console.log(error);
       throw new TRPCError({
         message: "Internal error retreiving from discord.",
-        code: "INTERNAL_SERVER_ERROR",
+        code: "INTERNAL_SERVER_ERROR"
       });
     }
-  }),
+  })
 });

@@ -6,8 +6,15 @@ import { api } from "~/utils/api";
 export default function Home() {
   //   const hello = api.example.hello.useQuery({ text: "Railway" });
   //   const clerkuser = api.example.me.useQuery();
-  const rule = api.rules.getAll.useQuery({ guild_id: "846599213440696360" });
-  const servers = api.discord.getServersWhereUserIsAdmin.useQuery();
+  const customRules = api.rules.getAllCustom.useQuery({
+    guild_id: "846599213440696360"
+  });
+
+  const standardRules = api.rules.getEnabledNonCustom.useQuery({
+    guild_id: "846599213440696360"
+  });
+
+  const servers = api.discord.getServers.useQuery();
   const { mutate } = api.discord.hello.useMutation();
 
   return (
@@ -18,16 +25,26 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <div className="text-2xl text-white">
+        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 bg-slate-300 rounded-md">
+          <div className="text-2xl text-slate-800">
             <div className="flex flex-col">
-              {rule.data
-                ? rule.data.rules.flatMap((rule) => (
+              <span>Custom Rules:</span>
+              {customRules.data
+                ? customRules.data.rules.flatMap((rule) => (
                     <span>
                       {rule.rule_name}: {rule.rule_content}
                     </span>
                   ))
                 : "Loading..."}
+              <br />
+              <span>Standard Rules:</span>
+              {standardRules.data
+                ? standardRules.data?.rules.flatMap((rule) => (
+                    <span>{rule.type}</span>
+                  ))
+                : "Loading..."}
+              <br />
+              <span>All Servers:</span>
               {servers.data
                 ? servers.data.flatMap((guild) => (
                     <span>
@@ -37,11 +54,18 @@ export default function Home() {
                 : "Loading..."}
             </div>
             <br />
-            <input
-              type="button"
-              value="Send a message"
-              onClick={() => mutate({ text: "hello from react frontend" })}
-            />
+            <div className="flex justify-center">
+              <button
+                onClick={() =>
+                  mutate({
+                    text: "THIS IS A TEST OF THE EMERGENCY BROADCAST SYSTEM. PLEASE PANIC."
+                  })
+                }
+                className="bg-slate-100 p-2 rounded-md shadow-md font-semibold w-2/3"
+              >
+                Send a message
+              </button>
+            </div>
           </div>
           <AddRuleForm />
         </div>
@@ -60,29 +84,39 @@ function AddRuleForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => mutate({...data});
+  const onSubmit: SubmitHandler<Inputs> = (data) => mutate({ ...data });
 
   return (
-    <div className="flex flex-col bg-sky-200">
+    <div className="flex flex-col bg-slate-300 p-4 rounded-md border-2">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
         <div className="flex flex-col">
           <span>Guild Id:</span>
           <input
             defaultValue={"846599213440696360"}
             {...register("guild_id", { required: true })}
-            className="mb-4"
+            className="mb-4 p-1 rounded-sm"
           />
-          {errors.guild_id && <span>This field is required</span>}
+          {errors.guild_id && (
+            <span className="text-red-600 italic">This field is required</span>
+          )}
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col mb-4">
           <span>Regex:</span>
-          <input {...register("regex", { required: true })} className="mb-4" />
-          {errors.regex && <span>This field is required</span>}
+          <input
+            {...register("regex", { required: true })}
+            className="p-1 rounded-sm"
+          />
+          {errors.regex && (
+            <span className="text-red-600 italic">This field is required</span>
+          )}
         </div>
-        <input type="submit" className="bg-white" />
+        <input
+          type="submit"
+          className="bg-white p-1 rounded-md shadow-md font-semibold"
+        />
       </form>
     </div>
   );
