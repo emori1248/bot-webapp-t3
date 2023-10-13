@@ -1,8 +1,3 @@
-import Head from "next/head";
-import Link from "next/link";
-
-
-import { api } from "~/utils/api";
 import Layout from "~/components/Layout";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 

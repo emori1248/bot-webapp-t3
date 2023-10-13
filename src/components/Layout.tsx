@@ -1,20 +1,8 @@
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import Head from "next/head";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
-
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-  navigationMenuTriggerStyle
-} from "@/components/ui/navigation-menu";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -51,7 +39,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[200px]">
-                  <a href="/" className="flex flex-row">
+                  <Link href="/" className="flex flex-row">
                     <Avatar className="mr-4 h-8 w-8">
                       <AvatarImage src="https://github.com/shadcn.png" />
                       <AvatarFallback>?</AvatarFallback>
@@ -59,7 +47,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                     <p className="text-md overflow-ellipsis overflow-hidden block whitespace-nowrap h-8">
                       Server Name
                     </p>
-                  </a>
+                  </Link>
                 </PopoverContent>
               </Popover>
               <Button variant="ghost">Log Out</Button>
